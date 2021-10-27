@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:fitsSystemWindows="false"
+            android:foreground="@drawable/bg_gradient"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ooi" />
+
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/wew"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="#0D000000"
+                app:cardElevation="0dp">
+
+                <androidx.constraintlayout.motion.widget.MotionLayout
+                    android:id="@+id/motion"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:animationCache="true"
+                    android:clickable="true"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:fitsSystemWindows="true"
+                    android:focusable="true"
+                    app:layoutDescription="@xml/activity_main_xml_constraintlayout_scene">
+
+                    <org.streamx.utils.VerticalTextView
+                        android:id="@+id/verticalTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginBottom="4dp"
+                        android:alpha=".5"
+                        android:fontFamily="@font/google_sans"
+                        android:rotation="180"
+                        android:text="StreamX "
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="italic"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/textView" />
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/quicksand"
+                        android:includeFontPadding="false"
+                        android:text="Watch Anything\nWith Anyone"
+                        android:textColor="@color/white"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/guideLeft"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/childOne"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:alpha=".8"
+                        android:fontFamily="@font/google_sans"
+                        android:text="Watch Together"
+                        android:textColor="@color/white"
+                        android:textSize="25sp"
+                        app:layout_constraintStart_toStartOf="@id/textView"
+                        app:layout_constraintTop_toBottomOf="@id/textView" />
+
+                    <TextView
+                        android:id="@+id/childTwo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:alpha=".6"
+                        android:fontFamily="@font/google_sans"
+                        android:text="Connect Worldwide"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="@id/textView"
+                        app:layout_constraintTop_toBottomOf="@id/textView" />
+
+                    <TextView
+                        android:id="@+id/childThr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:alpha=".6"
+                        android:fontFamily="@font/google_sans"
+                        android:text="Let's get started!"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toTopOf="@id/path"
+                        app:layout_constraintStart_toStartOf="@id/path" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/path"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:outlineProvider="none"
+                        app:cardBackgroundColor="#0D000000"
+                        app:cardCornerRadius="24dp"
+                        app:cardMaxElevation="0dp"
+                        app:layout_constraintBottom_toBottomOf="@id/guideBottom"
+                        app:layout_constraintEnd_toEndOf="@id/guideRight"
+                        app:layout_constraintStart_toStartOf="@id/guideLeft"
+                        app:strokeWidth="0dp" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/moveMotion"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/right_arrow"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@id/path"
+                        app:layout_constraintStart_toStartOf="@id/path"
+                        app:layout_constraintTop_toTopOf="@id/path" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideLeft"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="20dp" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideRight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_end="20dp" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideBottom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_end="16dp" />
+                </androidx.constraintlayout.motion.widget.MotionLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </eightbitlab.com.blurview.BlurView>
+    </FrameLayout>
+</layout>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "307683564329",
+    "project_id": "streamx-3ecc9",
+    "storage_bucket": "streamx-3ecc9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307683564329:android:1e8fefc9ee143d1d917538",
+        "android_client_info": {
+          "package_name": "org.streamx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "307683564329-j77id47l9alfqs4rcbr0i612eb0l4esh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.streamx",
+            "certificate_hash": "704ce527d121df2730710b37572becf62c6d5917"
+          }
+        },
+        {
+          "client_id": "307683564329-lh5iocl0kj2bjckro9ofop168ber6foq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDaU6Gk8AcDdS1PtW4rNy00Z8pp7on-6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "307683564329-lh5iocl0kj2bjckro9ofop168ber6foq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

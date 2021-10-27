@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.streamx">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <application
+        android:name="org.MyApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.StreamX"
+        android:usesCleartextTraffic="true">
+
+        <service
+            android:process=":new"
+            android:label="User Removal Task"
+            android:name=".MyService_"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <activity
+            android:name=".activities.PostMainActivity_"
+            android:configChanges="orientation|screenLayout|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/dynamic_url"
+                    android:scheme="http" />
+                <data
+                    android:host="@string/dynamic_url"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.MainActivity_">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
