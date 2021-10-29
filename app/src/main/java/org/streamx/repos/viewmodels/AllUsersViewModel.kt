@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 
 class AllUsersViewModel : ViewModel() {
     val liveRoomId by lazy { MutableLiveData("") }
-    val liveListUsers by lazy { MutableLiveData(arrayListOf<String>()) }
+    val liveListUsers by lazy { MutableLiveData<ArrayList<String>>(null) }
     val liveVideoPlaying by lazy { MutableLiveData(false) }
     val liveVideoDuration by lazy { MutableLiveData(0L) }
     val liveVideoFile by lazy { MutableLiveData<String>() }

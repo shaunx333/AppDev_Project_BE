@@ -172,8 +172,8 @@
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/google_sans"
                     android:text="Play"
-                    android:backgroundTint="#ABF4AE"
-                    android:textColor="@color/white"
+                    android:backgroundTint="#A1FDA5"
+                    android:textColor="@color/black"
                     android:visibility="gone"
                     app:cornerRadius="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -185,44 +185,49 @@
                     app:strokeWidth="0dp"
                     tools:visibility="visible" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/createRoom"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:layout_marginTop="14dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/google_sans"
-                    android:text="create"
-                    android:textColor="#7A7979"
-                    app:cornerRadius="24dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/joinRoom"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:rippleColor="#33878787"
-                    
-                    app:strokeWidth="0dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/joinRoom"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:backgroundTint="#ABF4AE"
-                    android:fontFamily="@font/google_sans"
-                    android:text="Join"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    app:cornerRadius="24dp"
-                    app:layout_constraintEnd_toStartOf="@+id/createRoom"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:rippleColor="#33878787"
-                    app:strokeWidth="0dp" />
+                    android:layout_height="wrap_content">
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/createRoom"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/google_sans"
+                        android:text="create"
+                        android:textColor="#7A7979"
+                        app:cornerRadius="24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/joinRoom"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:rippleColor="#33878787"
+
+                        app:strokeWidth="0dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/joinRoom"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:backgroundTint="#A1FDA5"
+                        android:fontFamily="@font/google_sans"
+                        android:text="Join"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:cornerRadius="24dp"
+                        app:layout_constraintEnd_toStartOf="@+id/createRoom"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:rippleColor="#33878787"
+                        app:strokeWidth="0dp" />
+                </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

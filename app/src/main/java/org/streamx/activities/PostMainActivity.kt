@@ -119,6 +119,11 @@ open class PostMainActivity :
         var widthImage = 0
 
         depUtils.usersliveViewModel.liveListUsers.observe(this) {
+            if (it == null){
+                return@observe
+            }
+            if (depUtils.isUserAdmin())
+                resetInfoLabel("Users joined ${it.size}")
             logit("liveListUsers ${it.size}")
         }
         depUtils.usersliveViewModel.liveVideoPlaying.observe(this) {
@@ -266,7 +271,7 @@ open class PostMainActivity :
                 lottieView.cancelAnimation()
             else
                 lottieView.playAnimation()
-            TransitionManager.beginDelayedTransition(binding.joinRoom.parent as ViewGroup)
+            TransitionManager.beginDelayedTransition(binding.childViews.getChildAt(0) as ViewGroup)
             val visibilityVal = if (hide) View.GONE else View.VISIBLE
             val visibilityRevVal = if (!hide) View.GONE else View.VISIBLE
 
@@ -966,6 +971,7 @@ open class PostMainActivity :
                 }
             }.addOnFailureListener {
                 resetInfoLabel()
+                animateToVideoView()
                 view?.isEnabled = true
                 this quickToast it.localizedMessage
                 pd.dismiss()

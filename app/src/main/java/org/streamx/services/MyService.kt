@@ -46,7 +46,7 @@ open class MyService : Service() {
 
     private fun removeRoom(roomId: String) {
         if (roomId == "") {
-            stopForeground(true)
+            //stopForeground(true)
             return
         }
 
@@ -66,13 +66,13 @@ open class MyService : Service() {
                             depUtils.usersliveViewModel.liveVideoFile.value = ""
 
                             depUtils.miniPrefs.currentGroupId().put("")
-                            stopForeground(true)
+                            //stopForeground(true)
                         }.addOnFailureListener {
-                            stopForeground(true)
+                            //stopForeground(true)
                         }
                 } else {
                     logit("Room not exist: $roomId")
-                    stopForeground(true)
+                    //stopForeground(true)
                 }
             }
     }
@@ -85,7 +85,7 @@ open class MyService : Service() {
         )
         if (roomId.isBlank() && depUtils.miniPrefs.currentUserId().get().isNullOrBlank()
         ) {
-            stopForeground(true)
+            //stopForeground(true)
             return
         } else if (depUtils.miniPrefs.currentUserId().get() == roomId)
             removeRoom(roomId)
@@ -99,7 +99,7 @@ open class MyService : Service() {
 
     private fun removeUserFromRoom(roomId: String, userId: String) {
         if (roomId.isBlank() || userId.isBlank()) {
-            stopForeground(true)
+            //stopForeground(true)
             return
         }
         Firebase.database
@@ -132,24 +132,24 @@ open class MyService : Service() {
                                     .child(roomId)
                                     .setValue(ee)
                                     .addOnCompleteListener {
-                                        stopForeground(true)
+                                        //stopForeground(true)
                                     }
                             } else {
                                 depUtils.usersliveViewModel.liveRoomId.postValue("")
                                 depUtils.miniPrefs.currentGroupId().put("")
-                                stopForeground(true)
+                                //stopForeground(true)
                             }
                         }.addOnFailureListener {
-                            stopForeground(true)
+                            //stopForeground(true)
                         }
                 } else {
                     depUtils.miniPrefs.currentGroupId().put("")
                     depUtils.usersliveViewModel.liveRoomId.postValue("")
                     this quickToast "User doesn't exist"
-                    stopForeground(true)
+                    //stopForeground(true)
                 }
             }.addOnFailureListener {
-                stopForeground(true)
+                //stopForeground(true)
             }
     }
 
