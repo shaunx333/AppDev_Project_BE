@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">StreamX</string>
     <string name="dynamic_url">streamx.page.link</string>
+    <string name="join_room">No room joined <font color="#ff0000">yet!</font></string>
+    <string name="creating_room">Creating <font color="#ABF4AE">one!</font></string>
+    <string name="dem_url">https://drive.google.com/open?id=1TaYAC3jGRTcIw_qlIh5w-mcnbfY1H4jL</string>
 </resources>

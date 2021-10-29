@@ -1,28 +1,22 @@
 package org.streamx.utils
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.content.res.Resources
-import android.util.Log
-import android.widget.Toast
-import org.streamx.BuildConfig
 import android.app.ActivityManager
 import android.content.ClipData
 import android.content.ClipboardManager
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-
-
-
-
-
+import android.content.Context
+import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Color
+import android.util.Log
+import android.widget.Toast
+import org.streamx.BuildConfig
 
 
 fun <T> Activity.startAct(newAct: Class<T>, finish: Boolean = true) {
     startActivity(Intent(this, newAct))
     if (finish)
-    finish()
+        finish()
 }
 
 val Int.toPx: Int
@@ -31,6 +25,16 @@ val Int.toPx: Int
 val Int.toDp: Float
     get() = (this / Resources.getSystem().displayMetrics.density)
 
+fun isColorDark(color: Int): Boolean = run {
+    val red = Color.red(color)
+    val green = Color.green(color)
+    val blue = Color.blue(color)
+    0.299 * red + (0.587 * green + 0.114 * blue) < 150
+}
+
+fun Int.getContrastColor(opp: Boolean = false): Int {
+    return if (isColorDark(this) && !opp) Color.WHITE else Color.BLACK
+}
 
 fun getLocalClassName(context: Context): String? {
     val packageName = context.packageName
@@ -61,7 +65,7 @@ fun logit(msg: Any? = "...") {
 }
 
 
- fun Context.setClipboard(text: String, label: String = "Copied Text") {
+fun Context.setClipboard(text: String, label: String = "Copied Text") {
     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText(label, text)
     clipboard.setPrimaryClip(clip)

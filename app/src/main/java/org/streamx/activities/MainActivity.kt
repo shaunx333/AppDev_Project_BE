@@ -73,8 +73,10 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding:
             val mTask: Task<GoogleSignInAccount> =
                 GoogleSignIn.getSignedInAccountFromIntent(data)
             mTask.addOnSuccessListener {
+                this quickToast "Registering"
                 it.idToken?.let { firebaseAuthWithGoogle(it) }
             }.addOnFailureListener {
+                this quickToast it.localizedMessage
                 it.printStackTrace()
             }
         }
@@ -83,7 +85,7 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding:
     override fun onCreate(savedInstanceState: Bundle?) {
         window.navigationBarColor = Color.TRANSPARENT
         window.statusBarColor = Color.TRANSPARENT
-        supportActionBar?.hide()
+        window.decorView.systemUiVisibility += View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
         }

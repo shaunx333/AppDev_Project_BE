@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.graphics.Color
-import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
@@ -21,6 +20,7 @@ import org.streamx.IRemoteService
 import org.streamx.di.DepUtils
 import org.streamx.utils.StreamxConstants
 import org.streamx.utils.logit
+import org.streamx.utils.quickToast
 import java.util.*
 
 @EService
@@ -45,8 +45,10 @@ open class MyService : Service() {
     lateinit var depUtils: DepUtils
 
     private fun removeRoom(roomId: String) {
-        if (roomId == "")
+        if (roomId == "") {
+            stopForeground(true)
             return
+        }
 
         Firebase.database
             .getReference(StreamxConstants.ReferenceKeys.KEY_ALL_USERS)
@@ -60,11 +62,18 @@ open class MyService : Service() {
                         .child(roomId)
                         .removeValue()
                         .addOnSuccessListener {
-                            depUtils.setGroupId("")
+                            depUtils.usersliveViewModel.liveRoomId.value = ""
+                            depUtils.usersliveViewModel.liveVideoFile.value = ""
+
                             depUtils.miniPrefs.currentGroupId().put("")
+                            stopForeground(true)
+                        }.addOnFailureListener {
+                            stopForeground(true)
                         }
-                } else
+                } else {
                     logit("Room not exist: $roomId")
+                    stopForeground(true)
+                }
             }
     }
 
@@ -72,11 +81,13 @@ open class MyService : Service() {
         logit(
             "myser Trying to remove user ${
                 depUtils.miniPrefs.currentUserId().get()
-            } from ${depUtils.miniPrefs.currentGroupId().get()}"
+            } from ${depUtils.miniPrefs.currentGroupId().get()} new:$roomId"
         )
         if (roomId.isBlank() && depUtils.miniPrefs.currentUserId().get().isNullOrBlank()
-        ) return
-        else if (depUtils.miniPrefs.currentUserId().get() == roomId)
+        ) {
+            stopForeground(true)
+            return
+        } else if (depUtils.miniPrefs.currentUserId().get() == roomId)
             removeRoom(roomId)
         else {
             removeUserFromRoom(
@@ -87,8 +98,10 @@ open class MyService : Service() {
     }
 
     private fun removeUserFromRoom(roomId: String, userId: String) {
-        if (roomId.isBlank() || userId.isBlank())
+        if (roomId.isBlank() || userId.isBlank()) {
+            stopForeground(true)
             return
+        }
         Firebase.database
             .getReference(StreamxConstants.ReferenceKeys.KEY_ALL_USERS)
             .child("users")
@@ -111,38 +124,41 @@ open class MyService : Service() {
                                     ee["users"] as ArrayList<String>
                                 depUtils.usersliveViewModel.liveListUsers.value!!.remove(userId)
                                 depUtils.miniPrefs.currentGroupId().put("")
-                                depUtils.setGroupId("")
+
+                                depUtils.usersliveViewModel.liveRoomId.postValue("")
                                 ee["users"] = depUtils.usersliveViewModel.liveListUsers.value!!
                                 Firebase.database
                                     .getReference(StreamxConstants.ReferenceKeys.KEY_ACTIVE_ROOM)
                                     .child(roomId)
                                     .setValue(ee)
+                                    .addOnCompleteListener {
+                                        stopForeground(true)
+                                    }
                             } else {
+                                depUtils.usersliveViewModel.liveRoomId.postValue("")
                                 depUtils.miniPrefs.currentGroupId().put("")
+                                stopForeground(true)
                             }
+                        }.addOnFailureListener {
+                            stopForeground(true)
                         }
                 } else {
                     depUtils.miniPrefs.currentGroupId().put("")
-                    //this quickToast "User doesn't exist"
+                    depUtils.usersliveViewModel.liveRoomId.postValue("")
+                    this quickToast "User doesn't exist"
+                    stopForeground(true)
                 }
+            }.addOnFailureListener {
+                stopForeground(true)
             }
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        Firebase.initialize(this)
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            startMyOwnForeground()
-        } else {
-            startForeground(101, Notification())
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     open fun startMyOwnForeground() {
         val chan = NotificationChannel(
             "101",
-            javaClass.simpleName,
+            "Background Service",
             NotificationManager.IMPORTANCE_NONE
         )
         chan.lightColor = Color.WHITE
@@ -150,34 +166,32 @@ open class MyService : Service() {
         notifManager.createNotificationChannel(chan)
         val notificationBuilder: NotificationCompat.Builder =
             NotificationCompat.Builder(this, "101")
-        val notification: Notification = notificationBuilder.setOngoing(true)
+        val notification: Notification = notificationBuilder
+            .setOngoing(true)
+            .setSilent(true)
             .setContentTitle("App is running in background")
-            .setPriority(NotificationManager.IMPORTANCE_MIN)
+            .setPriority(NotificationManager.IMPORTANCE_NONE)
             .setCategory(Notification.CATEGORY_SERVICE)
             .build()
         startForeground(101, notification)
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        logit("Trying to do stuff")
-        /*var i = 0
-        Timer().schedule(
-            object : TimerTask() {
-                override fun run() {
-                    logit(++i)
-                }
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        removeUserIfPresent(depUtils.miniPrefs.currentGroupId().get())
+    }
 
-            }, 0, 1000
-        )*/
-        //removeUserIfPresent()
-        return START_REDELIVER_INTENT
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Firebase.initialize(this)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            startMyOwnForeground()
+        } else {
+            startForeground(101, Notification())
+        }
+        return START_STICKY
     }
 
     override fun onBind(intent: Intent): IBinder? {
         return binder
-    }
-
-    class LocalBinder : Binder() {
-        fun getServic() = this
     }
 }

@@ -19,7 +19,7 @@
         <service
             android:process=":new"
             android:label="User Removal Task"
-            android:name=".MyService_"
+            android:name=".services.MyService_"
             android:enabled="true"
             android:exported="true"/>
 
