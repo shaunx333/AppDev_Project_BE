@@ -128,11 +128,18 @@ open class PostMainActivity :
             logit("liveListUsers ${it.size}")
         }
         depUtils.usersliveViewModel.liveVideoPlaying.observe(this) {
-            if (it)
+            logit("liveVideoPlaying $it")
+
+            mPlayer?.let { player ->
+                if (player.isPlaying && !it)
+                    player.pause()
+                else if (!player.isPlaying && it)
+                    player.play()
+            }
+            /*if (it)
                 mPlayer?.play()
             else
-                mPlayer?.pause()
-            logit("liveVideoPlaying $it")
+                mPlayer?.pause()*/
         }
         depUtils.usersliveViewModel.liveVideoDuration.observe(this) { dur ->
             mPlayer?.let {
@@ -300,6 +307,10 @@ open class PostMainActivity :
         ObjectAnimator.ofArgb(defBg, this).run {
             doOnStart {
                 reverseAlltextColors(defBg)
+                if (!isColorDark(defBg)){
+                    window.decorView.systemUiVisibility=View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                } else
+                    window.decorView.systemUiVisibility=0
                 //animateToVideoView()
             }
             addUpdateListener {
@@ -335,7 +346,7 @@ open class PostMainActivity :
 
         binding.infoLabelShimmer.showShimmer(true)
         val options = RequestOptions().frame(TimeUnit.SECONDS.toMicros(1))
-        Glide.with(baseContext).load(it).apply(options).thumbnail(0.03f)
+        Glide.with(baseContext).load(it).apply(options).placeholder(binding.profileImg.drawable).override(50,50).thumbnail(0.03f)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
@@ -359,7 +370,7 @@ open class PostMainActivity :
                         Palette.from(bm).generate().let {
                             val m =
                                 if (it.darkVibrantSwatch != null) it.darkVibrantSwatch else it.dominantSwatch
-                            m?.let{
+                            m?.let {
                                 bg = m.rgb
 
                                 val textC = ColorUtils.blendARGB(bg, bg.getContrastColor(), .5f)
@@ -489,11 +500,6 @@ open class PostMainActivity :
             }
     }
 
-    override fun onPause() {
-        super.onPause()
-        mPlayer?.pause()
-    }
-
     private fun serviceInit() {
         val inten = Intent(this, MyService_::class.java)
 
@@ -546,16 +552,21 @@ open class PostMainActivity :
                     super.onIsPlayingChanged(isPlaying)
                     updatePlaying(isPlaying)
                     if (isPlaying) {
-                        timer = Timer()
-                        timer?.schedule(
-                            object : TimerTask() {
-                                override fun run() {
-                                    runOnUiThread {
-                                        updateTimeDuration(TimeUnit.MILLISECONDS.toSeconds(mPlayer!!.currentPosition))
+                        timer = Timer().apply {
+                            schedule(
+                                object : TimerTask() {
+                                    override fun run() {
+                                        runOnUiThread {
+                                            updateTimeDuration(
+                                                TimeUnit.MILLISECONDS.toSeconds(
+                                                    mPlayer!!.currentPosition
+                                                )
+                                            )
+                                        }
                                     }
-                                }
-                            }, 0, 1000
-                        )
+                                }, 0, 1000
+                            )
+                        }
                     } else
                         timer?.cancel()
                 }
@@ -646,6 +657,7 @@ open class PostMainActivity :
     override fun onStop() {
         super.onStop()
         mPlayer?.pause()
+        timer?.cancel()
     }
 
 
@@ -1008,18 +1020,12 @@ open class PostMainActivity :
         val isLandScape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
         val visGone = if (isLandScape) View.GONE else View.VISIBLE
 
-        mPlayer?.let { player ->
-            if (player.playbackState == Player.STATE_READY) {
-                (binding.infoLabelShimmer.parent as ViewGroup).visibility = visGone
-                binding.exitBtn.visibility = visGone
-                binding.shareBtn.visibility = visGone
-                binding.infoLabel.visibility = visGone
-                val lp: FrameLayout.LayoutParams =
-                    binding.vidCard.layoutParams as FrameLayout.LayoutParams
-                lp.setMargins(0, 0, 0, 0)
-                binding.vidCard.layoutParams = lp
-            }
-        }
+        (binding.infoLabelShimmer.parent as ViewGroup).visibility = visGone
+        binding.exitBtn.visibility = visGone
+        binding.shareBtn.visibility = visGone
+        binding.infoLabel.visibility = visGone
+        binding.broadcastFile.visibility = visGone
+
         if (isLandScape) {
             binding.appbar.visibility = View.GONE
             (binding.childViews.layoutParams as CoordinatorLayout.LayoutParams).behavior =
@@ -1027,7 +1033,7 @@ open class PostMainActivity :
             getColor(R.color.black).animateColorsOfWindow()
             mPlayer?.videoScalingMode =
                 MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
-            binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+            binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
             window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             val lp2 = binding.vidCard.layoutParams as FrameLayout.LayoutParams
             lp2.setMargins(0, 0, 0, 0)

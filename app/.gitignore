@@ -2,3 +2,5 @@
 /src/androidTest
 /src/test
 /libs
+/release
+/debug
