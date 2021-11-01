@@ -27,6 +27,7 @@ import java.util.*
 open class MyService : Service() {
     @SystemService
     lateinit var notifManager: NotificationManager
+
     private val binder = object : IRemoteService.Stub() {
         override fun removeUser(roomId: String) {
 

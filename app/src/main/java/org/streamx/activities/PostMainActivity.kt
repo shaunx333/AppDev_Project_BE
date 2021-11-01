@@ -102,6 +102,7 @@ open class PostMainActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         serviceInit()
+
         super.onCreate(savedInstanceState)
 
         initViews()
@@ -119,7 +120,7 @@ open class PostMainActivity :
         var widthImage = 0
 
         depUtils.usersliveViewModel.liveListUsers.observe(this) {
-            if (it == null){
+            if (it == null) {
                 return@observe
             }
             if (depUtils.isUserAdmin())
@@ -356,22 +357,22 @@ open class PostMainActivity :
                     resource?.let {
                         val bm = it.toBitmap(50, 50)
                         Palette.from(bm).generate().let {
-
                             val m =
                                 if (it.darkVibrantSwatch != null) it.darkVibrantSwatch else it.dominantSwatch
+                            m?.let{
+                                bg = m.rgb
 
-                            bg = m!!.rgb
-
-                            val textC = ColorUtils.blendARGB(bg, bg.getContrastColor(), .5f)
-                            //val textC = it.dominantSwatch!!.bodyTextColor
-                            bg.animateColorsOfWindow()
-                            binding.toolbar.setCollapsedTitleTextColor(textC)
-                            binding.infoLabel.setTextColor(textC)
-                            (binding.shareBtn.getChildAt(0) as ImageView).imageTintList =
-                                ColorStateList.valueOf(textC)
-                            (binding.exitBtn.getChildAt(0) as ImageView).imageTintList =
-                                ColorStateList.valueOf(textC)
-                            resetInfoLabel("Playing video!", delay = true)
+                                val textC = ColorUtils.blendARGB(bg, bg.getContrastColor(), .5f)
+                                //val textC = it.dominantSwatch!!.bodyTextColor
+                                bg.animateColorsOfWindow()
+                                binding.toolbar.setCollapsedTitleTextColor(textC)
+                                binding.infoLabel.setTextColor(textC)
+                                (binding.shareBtn.getChildAt(0) as ImageView).imageTintList =
+                                    ColorStateList.valueOf(textC)
+                                (binding.exitBtn.getChildAt(0) as ImageView).imageTintList =
+                                    ColorStateList.valueOf(textC)
+                                resetInfoLabel("Playing video!", delay = true)
+                            }
                         }
                     } ?: binding.infoLabelShimmer.hideShimmer()
                     return false
